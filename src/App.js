@@ -4,6 +4,7 @@ import { RecordingsList } from './components/RecordingsList';
 import { QuestionSelector } from './components/QuestionSelector';
 import { SyncButton } from './components/SyncButton';
 import { ClearStorageButton } from './components/ClearStorageButton';
+import NewResidentButton from './components/NewResidentButton';
 import { initDB } from './services/db';
 import './App.css';
 
@@ -55,15 +56,18 @@ function App() {
       <main>
         {activeTab === 'record' ? (
           <div className="record-section">
-            <div className="resident-input">
-              <label htmlFor="residentId">Resident ID:</label>
-              <input
-                id="residentId"
-                type="text"
-                value={residentId}
-                onChange={(e) => setResidentId(e.target.value)}
-                placeholder="Enter Resident ID"
-              />
+            <div className="resident-section">
+              <div className="resident-input">
+                <label htmlFor="residentId">Resident ID:</label>
+                <input
+                  id="residentId"
+                  type="text"
+                  value={residentId}
+                  onChange={(e) => setResidentId(e.target.value)}
+                  placeholder="Enter Resident ID"
+                />
+                <NewResidentButton />
+              </div>
               {residentId.trim() && (
                 <button 
                   className="questions-button"

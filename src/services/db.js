@@ -1,8 +1,36 @@
 const DB_NAME = 'VideoStoriesDB';
-const DB_VERSION = 1;
-const STORE_NAME = 'recordings';
+const DB_VERSION = 2;
+const RECORDINGS_STORE = 'recordings';
+const RESIDENTS_STORE = 'residents';
 
 let db = null;
+
+// Resident functions
+export const addResident = async (resident) => {
+  if (!db) throw new Error('Database not initialized');
+
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction([RESIDENTS_STORE], 'readwrite');
+    const store = transaction.objectStore(RESIDENTS_STORE);
+    const request = store.add(resident);
+
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+};
+
+export const getResident = async (residentId) => {
+  if (!db) throw new Error('Database not initialized');
+
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction([RESIDENTS_STORE], 'readonly');
+    const store = transaction.objectStore(RESIDENTS_STORE);
+    const request = store.get(residentId);
+
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+};
 
 export const initDB = () => {
   return new Promise((resolve, reject) => {
@@ -20,10 +48,17 @@ export const initDB = () => {
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
       
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+      if (!db.objectStoreNames.contains(RECORDINGS_STORE)) {
+        const store = db.createObjectStore(RECORDINGS_STORE, { keyPath: 'id' });
         store.createIndex('uploaded', 'uploaded', { unique: false });
         store.createIndex('timestamp', 'timestamp', { unique: false });
+      }
+
+      if (!db.objectStoreNames.contains(RESIDENTS_STORE)) {
+        const store = db.createObjectStore(RESIDENTS_STORE, { keyPath: 'residentId' });
+        store.createIndex('facility', 'facility', { unique: false });
+        store.createIndex('name', 'name', { unique: false });
+        store.createIndex('createdAt', 'createdAt', { unique: false });
       }
     };
   });
@@ -33,8 +68,8 @@ export const saveRecording = async (recording) => {
   if (!db) throw new Error('Database not initialized');
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction([STORE_NAME], 'readwrite');
-    const store = transaction.objectStore(STORE_NAME);
+    const transaction = db.transaction([RECORDINGS_STORE], 'readwrite');
+    const store = transaction.objectStore(RECORDINGS_STORE);
     const request = store.put(recording);
 
     request.onsuccess = () => resolve(request.result);
@@ -46,8 +81,8 @@ export const getRecording = async (id) => {
   if (!db) throw new Error('Database not initialized');
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction([STORE_NAME], 'readonly');
-    const store = transaction.objectStore(STORE_NAME);
+    const transaction = db.transaction([RECORDINGS_STORE], 'readonly');
+    const store = transaction.objectStore(RECORDINGS_STORE);
     const request = store.get(id);
 
     request.onsuccess = () => resolve(request.result);
@@ -59,8 +94,8 @@ export const getAllRecordings = async () => {
   if (!db) throw new Error('Database not initialized');
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction([STORE_NAME], 'readonly');
-    const store = transaction.objectStore(STORE_NAME);
+    const transaction = db.transaction([RECORDINGS_STORE], 'readonly');
+    const store = transaction.objectStore(RECORDINGS_STORE);
     const request = store.getAll();
 
     request.onsuccess = () => {
@@ -78,8 +113,8 @@ export const getUnuploadedRecordings = async () => {
   if (!db) throw new Error('Database not initialized');
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction([STORE_NAME], 'readonly');
-    const store = transaction.objectStore(STORE_NAME);
+    const transaction = db.transaction([RECORDINGS_STORE], 'readonly');
+    const store = transaction.objectStore(RECORDINGS_STORE);
     const request = store.getAll();
 
     request.onsuccess = () => {
@@ -106,8 +141,8 @@ export const deleteRecording = async (id) => {
   if (!db) throw new Error('Database not initialized');
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction([STORE_NAME], 'readwrite');
-    const store = transaction.objectStore(STORE_NAME);
+    const transaction = db.transaction([RECORDINGS_STORE], 'readwrite');
+    const store = transaction.objectStore(RECORDINGS_STORE);
     const request = store.delete(id);
 
     request.onsuccess = () => resolve();
