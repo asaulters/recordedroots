@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { addResident, getResident } from '../services/db';
+import './NewResidentButton.css';
 
 const NewResidentButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,13 +15,15 @@ const NewResidentButton = () => {
     const { name, value } = e.target;
     setFormData(prevState => ({
       ...prevState,
-      [name]: value
+      [name]: name === 'residentId' ? value.toUpperCase() : value
     }));
   };
 
   const checkResidentId = async (id) => {
     try {
-      const existingResident = await getResident(id);
+      // Convert to uppercase when checking
+      const existingResident = await getResident(id.toUpperCase());
+      console.log('Checking resident ID:', id.toUpperCase(), 'Result:', existingResident);
       return !existingResident;
     } catch (error) {
       console.error('Error checking resident ID:', error);
@@ -47,9 +50,12 @@ const NewResidentButton = () => {
       await addResident({
         name: formData.name,
         facility: formData.facility,
-        residentId: formData.residentId,
+        residentId: formData.residentId.toUpperCase(), // Ensure ID is uppercase when stored
         createdAt: new Date().toISOString()
       });
+
+      // Log success for debugging
+      console.log('Successfully created resident:', formData.residentId.toUpperCase());
 
       setFormData({ name: '', facility: '', residentId: '' });
       setIsModalOpen(false);
@@ -61,78 +67,66 @@ const NewResidentButton = () => {
 
   return (
     <>
-      <button 
-        onClick={() => setIsModalOpen(true)}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      >
+      <button onClick={() => setIsModalOpen(true)}>
         New Resident
       </button>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white rounded-lg p-8 max-w-md w-full">
-            <h2 className="text-2xl font-bold mb-4">New Resident</h2>
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>New Resident</h2>
             
             <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                  Name
-                </label>
+              <div className="form-group">
+                <label htmlFor="name">Name</label>
                 <input
                   type="text"
                   id="name"
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
 
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="facility">
-                  Facility
-                </label>
+              <div className="form-group">
+                <label htmlFor="facility">Facility</label>
                 <input
                   type="text"
                   id="facility"
                   name="facility"
                   value={formData.facility}
                   onChange={handleInputChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
 
-              <div className="mb-6">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="residentId">
-                  Resident ID
-                </label>
+              <div className="form-group">
+                <label htmlFor="residentId">Resident ID</label>
                 <input
                   type="text"
                   id="residentId"
                   name="residentId"
                   value={formData.residentId}
                   onChange={handleInputChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
 
               {error && (
-                <div className="mb-4 text-red-500 text-sm">
+                <div className="error-message">
                   {error}
                 </div>
               )}
 
-              <div className="flex justify-end gap-4">
+              <div className="button-group">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+                  className="cancel-button"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  className="create-button"
                 >
                   Create
                 </button>

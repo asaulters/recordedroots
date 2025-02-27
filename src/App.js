@@ -5,22 +5,44 @@ import { QuestionSelector } from './components/QuestionSelector';
 import { SyncButton } from './components/SyncButton';
 import { ClearStorageButton } from './components/ClearStorageButton';
 import NewResidentButton from './components/NewResidentButton';
-import { initDB } from './services/db';
+import { initDB, getResident } from './services/db';
 import './App.css';
 
 function App() {
   const [activeTab, setActiveTab] = useState('record');
   const [residentId, setResidentId] = useState('');
-  const [showQuestions, setShowQuestions] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [residentError, setResidentError] = useState('');
+  const [hasValidResident, setHasValidResident] = useState(false);
 
   useEffect(() => {
     initDB().catch(console.error);
   }, []);
 
+  const handleResidentIdChange = async (e) => {
+    const id = e.target.value.toUpperCase();  // Convert to uppercase for consistency
+    setResidentId(id);
+    setResidentError('');
+    setHasValidResident(false);
+
+    // Only check for resident if we have at least 3 characters
+    if (id.trim().length >= 3) {
+      try {
+        const resident = await getResident(id);
+        if (resident) {
+          setHasValidResident(true);
+        } else {
+          setResidentError('Resident ID not found');
+        }
+      } catch (error) {
+        console.error('Error checking resident:', error);
+        setResidentError('Error checking resident ID');
+      }
+    }
+  };
+
   const handleTabChange = (tab) => {
     setActiveTab(tab);
-    setShowQuestions(false);
     setSelectedQuestion(null);
     if (tab === 'recordings') {
       setResidentId('');
@@ -36,7 +58,7 @@ function App() {
   return (
     <div className="App">
       <header>
-        <h1>Video Stories</h1>
+        <h1>Recorded Roots</h1>
         <div className="nav-buttons">
           <button 
             className={activeTab === 'record' ? 'active' : ''} 
@@ -48,7 +70,7 @@ function App() {
             className={activeTab === 'recordings' ? 'active' : ''} 
             onClick={() => handleTabChange('recordings')}
           >
-            Recordingsssss
+            Recordings
           </button>
         </div>
       </header>
@@ -59,26 +81,48 @@ function App() {
             <div className="resident-section">
               <div className="resident-input">
                 <label htmlFor="residentId">Resident ID:</label>
-                <input
-                  id="residentId"
-                  type="text"
-                  value={residentId}
-                  onChange={(e) => setResidentId(e.target.value)}
-                  placeholder="Enter Resident ID"
-                />
+                <div className="resident-input-group">
+                  <input
+                    id="residentId"
+                    type="text"
+                    value={residentId}
+                    onChange={handleResidentIdChange}
+                    onFocus={() => {
+                      setResidentId('');
+                      setResidentError('');
+                      setHasValidResident(false);
+                    }}
+                    onBlur={async () => {
+                      if (residentId.trim()) {
+                        try {
+                          const resident = await getResident(residentId);
+                          if (resident) {
+                            setHasValidResident(true);
+                          } else {
+                            setResidentError('Resident ID not found');
+                            setHasValidResident(false);
+                          }
+                        } catch (error) {
+                          console.error('Error checking resident:', error);
+                          setResidentError('Error checking resident ID');
+                          setHasValidResident(false);
+                        }
+                      }
+                    }}
+                    placeholder="Enter Resident ID"
+                    className={residentError ? 'error' : ''}
+                  />
+                  {residentError && (
+                    <div className="error-message">{residentError}</div>
+                  )}
+                </div>
+              </div>
+              <div className="storage-controls">
                 <NewResidentButton />
               </div>
-              {residentId.trim() && (
-                <button 
-                  className="questions-button"
-                  onClick={() => setShowQuestions(true)}
-                >
-                  Questions
-                </button>
-              )}
             </div>
 
-            {showQuestions && (
+            {hasValidResident && (
               <div className="questions-section">
                 <QuestionSelector onQuestionSelect={handleQuestionSelect} />
                 {selectedQuestion ? (
@@ -101,13 +145,15 @@ function App() {
                 )}
               </div>
             )}
+          </div>
+        ) : (
+          <div>
+            <RecordingsList />
             <div className="storage-controls">
               <SyncButton />
               <ClearStorageButton />
             </div>
           </div>
-        ) : (
-          <RecordingsList />
         )}
       </main>
     </div>

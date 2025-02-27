@@ -1,5 +1,5 @@
 const DB_NAME = 'VideoStoriesDB';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 const RECORDINGS_STORE = 'recordings';
 const RESIDENTS_STORE = 'residents';
 
@@ -25,9 +25,13 @@ export const getResident = async (residentId) => {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction([RESIDENTS_STORE], 'readonly');
     const store = transaction.objectStore(RESIDENTS_STORE);
-    const request = store.get(residentId);
+    // Convert to uppercase to ensure consistent lookup
+    const request = store.get(residentId.toUpperCase());
 
-    request.onsuccess = () => resolve(request.result);
+    request.onsuccess = () => {
+      console.log('Resident lookup result:', request.result);
+      resolve(request.result);
+    };
     request.onerror = () => reject(request.error);
   });
 };

@@ -51,9 +51,14 @@ header h1 {
 
 .resident-input {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 15px;
   margin-bottom: 20px;
+}
+
+.resident-input-group {
+  flex: 1;
+  max-width: 300px;
 }
 
 .resident-input label {
@@ -63,8 +68,7 @@ header h1 {
 }
 
 .resident-input input {
-  flex: 1;
-  max-width: 300px;
+  width: 100%;
   padding: 12px 16px;
   font-size: 1rem;
   border: 2px solid #ddd;
@@ -75,6 +79,91 @@ header h1 {
 .resident-input input:focus {
   outline: none;
   border-color: #007bff;
+}
+
+.resident-input input.error {
+  border-color: #dc3545;
+}
+
+.error-message {
+  color: red;
+  margin-top: 5px;
+  font-size: 0.9em;
+}
+
+/* New Resident Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+}
+
+.modal-content h2 {
+  margin-bottom: 20px;
+  font-size: 1.5em;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.cancel-button {
+  background-color: #ccc;
+  color: #333;
+}
+
+.create-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.cancel-button, .create-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancel-button:hover {
+  background-color: #999;
+}
+
+.create-button:hover {
+  background-color: #0056b3;
 }
 
 .questions-button {
