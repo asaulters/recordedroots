@@ -5,7 +5,7 @@ const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 
 // Configure S3 client
 const s3Client = new S3Client({ 

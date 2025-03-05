@@ -1,5 +1,6 @@
 export const generatePresignedUrl = async (recordingId, contentType, residentId, questionTopic, recordingDate) => {
-  const response = await fetch('http://localhost:3001/api/generate-presigned-url', {
+  const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+  const response = await fetch(`${apiUrl}/generate-presigned-url`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
