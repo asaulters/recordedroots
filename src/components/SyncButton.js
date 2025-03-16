@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { getUnuploadedRecordings, markAsUploaded } from '../services/db';
+import { getUnuploadedRecordings, markAsUploaded, syncResidents } from '../services/db';
 import { generatePresignedUrl, uploadToS3 } from '../services/s3';
 
 export const SyncButton = () => {
   const [isSyncing, setIsSyncing] = useState(false);
   const [error, setError] = useState(null);
   const [progress, setProgress] = useState(0);
+  const [syncType, setSyncType] = useState(''); // 'recordings' or 'residents'
 
   const handleSync = async () => {
     setIsSyncing(true);
@@ -13,14 +14,22 @@ export const SyncButton = () => {
     setProgress(0);
 
     try {
-      console.log('Starting sync process...');
+      // First sync residents
+      setSyncType('residents');
+      console.log('Starting resident sync...');
+      await syncResidents();
+      console.log('Resident sync complete');
+
+      // Then sync recordings
+      setSyncType('recordings');
+      console.log('Starting recordings sync...');
       const unuploadedRecordings = await getUnuploadedRecordings();
       const total = unuploadedRecordings.length;
       console.log(`Found ${total} unuploaded recordings`);
       
       if (total === 0) {
         console.log('No recordings to sync');
-        setError('No recordings to sync');
+        setError('Sync complete. No new recordings to upload');
         setIsSyncing(false);
         return;
       }
@@ -89,10 +98,10 @@ export const SyncButton = () => {
         disabled={isSyncing}
         className="sync-button"
       >
-        {isSyncing ? 'Syncing...' : 'Sync Now'}
+        {isSyncing ? `Syncing ${syncType}...` : 'Sync Now'}
       </button>
       
-      {isSyncing && progress > 0 && (
+      {isSyncing && (syncType === 'recordings' && progress > 0) && (
         <div className="progress-bar">
           <div 
             className="progress-fill"

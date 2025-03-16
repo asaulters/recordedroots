@@ -3,12 +3,22 @@ const express = require('express');
 const cors = require('cors');
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
+const { DynamoDBClient, PutItemCommand, GetItemCommand, ScanCommand } = require('@aws-sdk/client-dynamodb');
+const { marshall, unmarshall } = require('@aws-sdk/util-dynamodb');
 
 const app = express();
 const port = process.env.PORT || 3001;
 
-// Configure S3 client
-const s3Client = new S3Client({ 
+// Configure AWS clients
+const s3Client = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  }
+});
+
+const dynamoClient = new DynamoDBClient({
   region: process.env.AWS_REGION,
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -62,6 +72,59 @@ app.post('/api/generate-presigned-url', async (req, res) => {
   } catch (error) {
     console.error('Error generating pre-signed URL:', error);
     res.status(500).json({ error: 'Failed to generate pre-signed URL' });
+  }
+});
+
+// Resident endpoints
+app.post('/api/residents', async (req, res) => {
+  try {
+    const resident = req.body;
+    const command = new PutItemCommand({
+      TableName: process.env.DYNAMODB_RESIDENTS_TABLE,
+      Item: marshall(resident)
+    });
+    
+    await dynamoClient.send(command);
+    res.json({ message: 'Resident saved successfully' });
+  } catch (error) {
+    console.error('Error saving resident:', error);
+    res.status(500).json({ error: 'Failed to save resident' });
+  }
+});
+
+app.get('/api/residents/:residentId', async (req, res) => {
+  try {
+    const { residentId } = req.params;
+    const command = new GetItemCommand({
+      TableName: process.env.DYNAMODB_RESIDENTS_TABLE,
+      Key: marshall({ residentId: residentId.toUpperCase() })
+    });
+    
+    const response = await dynamoClient.send(command);
+    if (!response.Item) {
+      return res.status(404).json({ error: 'Resident not found' });
+    }
+    
+    res.json(unmarshall(response.Item));
+  } catch (error) {
+    console.error('Error fetching resident:', error);
+    res.status(500).json({ error: 'Failed to fetch resident' });
+  }
+});
+
+app.get('/api/residents', async (req, res) => {
+  try {
+    const command = new ScanCommand({
+      TableName: process.env.DYNAMODB_RESIDENTS_TABLE
+    });
+    
+    const response = await dynamoClient.send(command);
+    const residents = response.Items.map(item => unmarshall(item));
+    
+    res.json(residents);
+  } catch (error) {
+    console.error('Error fetching residents:', error);
+    res.status(500).json({ error: 'Failed to fetch residents' });
   }
 });
 
