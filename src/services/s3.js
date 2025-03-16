@@ -1,5 +1,5 @@
 export const generatePresignedUrl = async (recordingId, contentType, residentId, questionTopic, recordingDate) => {
-  const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+  const apiUrl = 'https://recordedroots.onrender.com/api';
   const response = await fetch(`${apiUrl}/generate-presigned-url`, {
     method: 'POST',
     headers: {
