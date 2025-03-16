@@ -92,27 +92,44 @@ app.post('/api/residents', async (req, res) => {
   }
 });
 
-app.get('/api/residents/:residentId', async (req, res) => {
+// Debug endpoint to directly query DynamoDB
+app.get('/api/debug/resident/:residentId', async (req, res) => {
   try {
     const { residentId } = req.params;
+    console.log('Debug: Querying DynamoDB for resident:', residentId);
+    
     const command = new GetItemCommand({
       TableName: process.env.DYNAMODB_RESIDENTS_TABLE,
       Key: marshall({ residentId: residentId.toUpperCase() })
     });
     
+    console.log('Debug: Executing DynamoDB command:', JSON.stringify(command.input, null, 2));
+    
     const response = await dynamoClient.send(command);
+    console.log('Debug: DynamoDB response:', JSON.stringify(response, null, 2));
+    
     if (!response.Item) {
-      return res.status(404).json({ error: 'Resident not found' });
+      console.log('Debug: No resident found in DynamoDB');
+      return res.status(404).json({ 
+        error: 'Resident not found',
+        debugInfo: {
+          queriedId: residentId.toUpperCase(),
+          tableName: process.env.DYNAMODB_RESIDENTS_TABLE
+        }
+      });
     }
     
-    res.json(unmarshall(response.Item));
+    const resident = unmarshall(response.Item);
+    console.log('Debug: Found resident:', resident);
+    res.json(resident);
   } catch (error) {
     console.error('Error fetching resident:', error);
     res.status(500).json({ error: 'Failed to fetch resident' });
   }
 });
 
-app.get('/api/residents', async (req, res) => {
+app.get('/api/debug/residents', async (req, res) => {
+  console.log('Debug: Scanning DynamoDB for all residents');
   try {
     const command = new ScanCommand({
       TableName: process.env.DYNAMODB_RESIDENTS_TABLE
@@ -120,8 +137,13 @@ app.get('/api/residents', async (req, res) => {
     
     const response = await dynamoClient.send(command);
     const residents = response.Items.map(item => unmarshall(item));
+    console.log('Debug: Found residents:', residents);
     
-    res.json(residents);
+    res.json({
+      count: residents.length,
+      residents: residents,
+      tableName: process.env.DYNAMODB_RESIDENTS_TABLE
+    });
   } catch (error) {
     console.error('Error fetching residents:', error);
     res.status(500).json({ error: 'Failed to fetch residents' });
