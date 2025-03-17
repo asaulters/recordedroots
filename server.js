@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const { DynamoDBClient, PutItemCommand, GetItemCommand, ScanCommand } = require('@aws-sdk/client-dynamodb');
@@ -29,12 +30,17 @@ const dynamoClient = new DynamoDBClient({
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from the build directory
-app.use(express.static('build'));
-
-// API routes
+// API routes first
 const apiRouter = express.Router();
 app.use('/api', apiRouter);
+
+// Then serve static files from the build directory
+app.use(express.static('build'));
+
+// Handle React routing, return all requests to React app
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 // Generate presigned URL endpoint
 apiRouter.post('/generate-presigned-url', async (req, res) => {
