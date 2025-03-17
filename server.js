@@ -32,8 +32,12 @@ app.use(express.json());
 // Serve static files from the build directory
 app.use(express.static('build'));
 
+// API routes
+const apiRouter = express.Router();
+app.use('/api', apiRouter);
+
 // Generate presigned URL endpoint
-app.post('/api/generate-presigned-url', async (req, res) => {
+apiRouter.post('/generate-presigned-url', async (req, res) => {
   try {
     console.log('Received presigned URL request:', req.body);
     const { recordingId, contentType, residentId, questionTopic } = req.body;
@@ -76,7 +80,7 @@ app.post('/api/generate-presigned-url', async (req, res) => {
 });
 
 // Resident endpoints
-app.post('/api/residents', async (req, res) => {
+apiRouter.post('/residents', async (req, res) => {
   try {
     const resident = req.body;
     const command = new PutItemCommand({
@@ -92,35 +96,24 @@ app.post('/api/residents', async (req, res) => {
   }
 });
 
-// Debug endpoint to directly query DynamoDB
-app.get('/api/debug/resident/:residentId', async (req, res) => {
+// Get a single resident
+apiRouter.get('/residents/:residentId', async (req, res) => {
   try {
     const { residentId } = req.params;
-    console.log('Debug: Querying DynamoDB for resident:', residentId);
+    console.log('Querying DynamoDB for resident:', residentId);
     
     const command = new GetItemCommand({
       TableName: process.env.DYNAMODB_RESIDENTS_TABLE,
       Key: marshall({ residentId: residentId.toUpperCase() })
     });
     
-    console.log('Debug: Executing DynamoDB command:', JSON.stringify(command.input, null, 2));
-    
     const response = await dynamoClient.send(command);
-    console.log('Debug: DynamoDB response:', JSON.stringify(response, null, 2));
     
     if (!response.Item) {
-      console.log('Debug: No resident found in DynamoDB');
-      return res.status(404).json({ 
-        error: 'Resident not found',
-        debugInfo: {
-          queriedId: residentId.toUpperCase(),
-          tableName: process.env.DYNAMODB_RESIDENTS_TABLE
-        }
-      });
+      return res.status(404).json({ error: 'Resident not found' });
     }
     
     const resident = unmarshall(response.Item);
-    console.log('Debug: Found resident:', resident);
     res.json(resident);
   } catch (error) {
     console.error('Error fetching resident:', error);
@@ -128,8 +121,8 @@ app.get('/api/debug/resident/:residentId', async (req, res) => {
   }
 });
 
-app.get('/api/debug/residents', async (req, res) => {
-  console.log('Debug: Scanning DynamoDB for all residents');
+// Get all residents
+apiRouter.get('/residents', async (req, res) => {
   try {
     const command = new ScanCommand({
       TableName: process.env.DYNAMODB_RESIDENTS_TABLE
@@ -137,13 +130,7 @@ app.get('/api/debug/residents', async (req, res) => {
     
     const response = await dynamoClient.send(command);
     const residents = response.Items.map(item => unmarshall(item));
-    console.log('Debug: Found residents:', residents);
-    
-    res.json({
-      count: residents.length,
-      residents: residents,
-      tableName: process.env.DYNAMODB_RESIDENTS_TABLE
-    });
+    res.json(residents);
   } catch (error) {
     console.error('Error fetching residents:', error);
     res.status(500).json({ error: 'Failed to fetch residents' });
