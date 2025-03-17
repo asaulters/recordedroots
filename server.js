@@ -27,10 +27,37 @@ const dynamoClient = new DynamoDBClient({
   }
 });
 
+// Log all requests and errors
+app.use((req, res, next) => {
+  console.log(`[REQUEST] ${req.method} ${req.path}`, {
+    headers: req.headers,
+    query: req.query,
+    body: req.body
+  });
+
+  // Capture response
+  const oldJson = res.json;
+  res.json = function(data) {
+    console.log(`[RESPONSE] ${req.method} ${req.path}`, {
+      status: res.statusCode,
+      data: data
+    });
+    return oldJson.apply(res, arguments);
+  };
+
+  next();
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(`[ERROR] ${req.method} ${req.path}:`, err);
+  res.status(500).json({ error: 'Internal server error', details: err.message });
+});
+
 app.use(cors());
 app.use(express.json());
 
-// API routes first
+// API routes
 const apiRouter = express.Router();
 app.use('/api', apiRouter);
 
