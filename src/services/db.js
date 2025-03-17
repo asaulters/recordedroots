@@ -10,7 +10,7 @@ export const addResident = async (resident) => {
   if (!db) throw new Error('Database not initialized');
 
   // First save to server
-  const apiUrl = 'https://recordedroots.onrender.com/api';
+  const apiUrl = process.env.REACT_APP_API_URL;
   console.log('Attempting to save resident to DynamoDB:', resident);
   
   try {
@@ -54,18 +54,14 @@ export const addResident = async (resident) => {
 export const getResident = async (residentId) => {
   if (!db) throw new Error('Database not initialized');
 
-  const apiUrl = 'https://recordedroots.onrender.com/api';
+  const apiUrl = process.env.REACT_APP_API_URL;
   const upperResidentId = residentId.toUpperCase();
   
   try {
-    // First check what's in DynamoDB using debug endpoint
     console.log('Checking DynamoDB for resident:', upperResidentId);
-    const debugResponse = await fetch(`${apiUrl}/debug/resident/${upperResidentId}`);
-    const debugData = await debugResponse.json();
-    console.log('DynamoDB debug response:', debugData);
-
-    if (debugResponse.ok) {
-      const serverResident = debugData;
+    const response = await fetch(`${apiUrl}/residents/${upperResidentId}`);
+    if (response.ok) {
+      const serverResident = await response.json();
       console.log('Found resident in DynamoDB:', serverResident);
       
       // Update local db with server data
@@ -74,7 +70,7 @@ export const getResident = async (residentId) => {
       await store.put(serverResident);
       return serverResident;
     } else {
-      console.log('Resident not found in DynamoDB:', debugData);
+      console.log('Resident not found in DynamoDB');
     }
   } catch (error) {
     console.error('Error fetching resident from server:', error);
@@ -101,30 +97,29 @@ export const getResident = async (residentId) => {
 export const syncResidents = async () => {
   if (!db) throw new Error('Database not initialized');
 
-  const apiUrl = 'https://recordedroots.onrender.com/api';
+  const apiUrl = process.env.REACT_APP_API_URL;
   console.log('Starting resident sync...');
   
   try {
-    // Use debug endpoint to get detailed info
-    const response = await fetch(`${apiUrl}/debug/residents`);
+    const response = await fetch(`${apiUrl}/residents`);
     if (!response.ok) {
       throw new Error('Failed to fetch residents from server');
     }
 
-    const data = await response.json();
-    console.log('DynamoDB residents scan result:', data);
+    const residents = await response.json();
+    console.log('DynamoDB residents scan result:', residents);
 
     const transaction = db.transaction([RESIDENTS_STORE], 'readwrite');
     const store = transaction.objectStore(RESIDENTS_STORE);
 
     // Update local db with all server residents
-    for (const resident of data.residents) {
+    for (const resident of residents) {
       console.log('Syncing resident to IndexedDB:', resident);
       await store.put(resident);
     }
 
-    console.log(`Successfully synced ${data.residents.length} residents to IndexedDB`);
-    return data.residents;
+    console.log(`Successfully synced ${residents.length} residents to IndexedDB`);
+    return residents;
   } catch (error) {
     console.error('Error syncing residents:', error);
     throw error;
