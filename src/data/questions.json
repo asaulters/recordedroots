@@ -1,0 +1,578 @@
+{
+  "sections": [
+    {
+      "id": "childhood-early-life",
+      "title": "Childhood & Early Life",
+      "questions": [
+        {
+          "prompt": "What is one of your earliest memories as a child?",
+          "followUp": "How did that moment shape the person you became?"
+        },
+        {
+          "prompt": "Can you describe the house or neighborhood you grew up in?",
+          "followUp": "Were there any special smells or sounds you still remember?"
+        },
+        {
+          "prompt": "What games or activities did you enjoy when you were young?",
+          "followUp": "Who did you usually play with?"
+        },
+        {
+          "prompt": "Tell me about your favorite childhood meal or treat.",
+          "followUp": "Is there a recipe or dish you still love to this day?"
+        },
+        {
+          "prompt": "Did your family have any special traditions for birthdays or holidays?",
+          "followUp": "How did you usually celebrate?"
+        },
+        {
+          "prompt": "Who was a person who influenced you greatly during your early years?"
+        },
+        {
+          "prompt": "What was school like for you when you were little?"
+        }
+      ]
+    },
+    {
+      "id": "family-relationships",
+      "title": "Family & Relationships",
+      "questions": [
+        {
+          "prompt": "Tell me about your parents or the people who raised you.",
+          "followUp": "What values did they teach you that you still hold today?"
+        },
+        {
+          "prompt": "Do you have any siblings? What was your relationship like growing up?",
+          "followUp": "Do you have a favorite story about something you did together?"
+        },
+        {
+          "prompt": "If you married or had a partner, how did you meet?",
+          "followUp": "What first attracted you to them?"
+        },
+        {
+          "prompt": "What advice would you give on maintaining strong family bonds?"
+        },
+        {
+          "prompt": "Do you have children or grandchildren? What's something you love sharing with them?"
+        },
+        {
+          "prompt": "How did your family handle challenges or disagreements?"
+        },
+        {
+          "prompt": "Do you have a favorite family tradition or holiday gathering memory?"
+        }
+      ]
+    },
+    {
+      "id": "education-career",
+      "title": "Education & Career",
+      "questions": [
+        {
+          "prompt": "What was school like when you were a teenager?",
+          "followUp": "What subjects or teachers left a lasting impression on you?"
+        },
+        {
+          "prompt": "Did you go to college, learn a trade, or get special training?",
+          "followUp": "How did that influence your future choices?"
+        },
+        {
+          "prompt": "What was your first job, and how did you feel when you started working?"
+        },
+        {
+          "prompt": "Can you describe a mentor or coworker who taught you something valuable?"
+        },
+        {
+          "prompt": "Which part of your career were you most proud of?",
+          "followUp": "Is there a particular project or achievement you remember best?"
+        },
+        {
+          "prompt": "What was your daily routine like at work?"
+        },
+        {
+          "prompt": "How did your career shape your view of the world or your personal values?"
+        }
+      ]
+    },
+    {
+      "id": "life-lessons-values",
+      "title": "Life Lessons & Values",
+      "questions": [
+        {
+          "prompt": "What's one important lesson you learned the hard way?"
+        },
+        {
+          "prompt": "Is there a piece of wisdom or advice someone once gave you that stayed with you?",
+          "followUp": "How has that advice guided your decisions?"
+        },
+        {
+          "prompt": "What personal values or principles have guided you through life?",
+          "followUp": "Which of these would you most like to pass on?"
+        },
+        {
+          "prompt": "Have your beliefs or outlook on life changed over time? How so?"
+        },
+        {
+          "prompt": "What do you think makes a good friend or a good neighbor?"
+        },
+        {
+          "prompt": "In tough times, what kept you hopeful or motivated?"
+        },
+        {
+          "prompt": "If you could share just one life lesson with someone younger, what would it be?"
+        }
+      ]
+    },
+    {
+      "id": "hobbies-pastimes",
+      "title": "Hobbies & Pastimes",
+      "questions": [
+        {
+          "prompt": "What hobbies or activities have brought you the most joy over the years?",
+          "followUp": "When did you first discover this interest?"
+        },
+        {
+          "prompt": "Are there any creative pursuits (art, music, writing) you enjoyed?"
+        },
+        {
+          "prompt": "Did you play any sports or enjoy any outdoor activities?",
+          "followUp": "What's your favorite memory from doing that?"
+        },
+        {
+          "prompt": "If you collected anything (stamps, coins, figurines), can you tell us about it?"
+        },
+        {
+          "prompt": "How did you usually spend your weekends or free time?"
+        },
+        {
+          "prompt": "Have your hobbies changed as you grew older?"
+        },
+        {
+          "prompt": "Is there a new hobby or pastime you'd like to try, even now?"
+        }
+      ]
+    },
+    {
+      "id": "historical-cultural-reflections",
+      "title": "Historical & Cultural Reflections",
+      "questions": [
+        {
+          "prompt": "What are some of the biggest changes in the world that you've witnessed?",
+          "followUp": "How did these changes affect your everyday life?"
+        },
+        {
+          "prompt": "What major historical events do you remember most vividly?",
+          "followUp": "How did you and your family react at the time?"
+        },
+        {
+          "prompt": "How did people communicate before modern technology (phones, computers)?"
+        },
+        {
+          "prompt": "Have you seen changes in fashion, music, or entertainment that surprised you?"
+        },
+        {
+          "prompt": "What do you think about modern technology compared to when you were young?"
+        },
+        {
+          "prompt": "Are there any traditions or customs from your youth that you miss today?"
+        },
+        {
+          "prompt": "Which invention or discovery do you find most remarkable in your lifetime?"
+        }
+      ]
+    },
+    {
+      "id": "favorite-memories-achievements",
+      "title": "Favorite Memories & Achievements",
+      "questions": [
+        {
+          "prompt": "What is one memory that never fails to make you smile?",
+          "followUp": "Who was with you in that memory?"
+        },
+        {
+          "prompt": "Can you think of a moment in your life when you felt especially proud?"
+        },
+        {
+          "prompt": "What was the best trip or vacation you ever took?",
+          "followUp": "What made it so memorable?"
+        },
+        {
+          "prompt": "Have you received any special awards or recognitions over the years?"
+        },
+        {
+          "prompt": "What do you consider to be your greatest accomplishment?"
+        },
+        {
+          "prompt": "Did you ever participate in local events or community activities you're proud of?"
+        },
+        {
+          "prompt": "Is there a particular day or event you wish you could relive?"
+        }
+      ]
+    },
+    {
+      "id": "surprising-funny-moments",
+      "title": "Surprising or Funny Moments",
+      "questions": [
+        {
+          "prompt": "Has anything ever happened that was so funny you still laugh about it today?",
+          "followUp": "Who was there to witness it with you?"
+        },
+        {
+          "prompt": "What's the most unexpected thing that's ever happened to you?"
+        },
+        {
+          "prompt": "Did you ever play practical jokes or have any pulled on you?",
+          "followUp": "How did it all end?"
+        },
+        {
+          "prompt": "Have you ever been in a situation where you were completely surprised by someone's kindness or humor?"
+        },
+        {
+          "prompt": "Are there any family stories that always lead to a good laugh at reunions?"
+        },
+        {
+          "prompt": "Have you ever tried something that didn't go as planned but ended up being funny later?"
+        },
+        {
+          "prompt": "What's the silliest mistake you ever made that turned into a good story?"
+        }
+      ]
+    },
+    {
+      "id": "challenges-how-overcame",
+      "title": "Challenges & How They Overcame Them",
+      "questions": [
+        {
+          "prompt": "What was one of the most difficult times in your life?",
+          "followUp": "How did you cope with or overcome that challenge?"
+        },
+        {
+          "prompt": "Did you ever face a health challenge or injury?",
+          "followUp": "What helped you stay positive?"
+        },
+        {
+          "prompt": "Was there ever a time you had to stand up for yourself or someone else?"
+        },
+        {
+          "prompt": "How have you dealt with loss or grief in your life?"
+        },
+        {
+          "prompt": "Did your family or friends help you through tough times? How?"
+        },
+        {
+          "prompt": "Is there something you wish you could tell your younger self about overcoming obstacles?"
+        },
+        {
+          "prompt": "What gave you hope or strength when things seemed very hard?"
+        }
+      ]
+    },
+    {
+      "id": "advice-future-generations",
+      "title": "Advice & Messages to Future Generations",
+      "questions": [
+        {
+          "prompt": "What do you want your children, grandchildren, or future generations to know about you?",
+          "followUp": "Why is that important for you to share?"
+        },
+        {
+          "prompt": "Is there a message of encouragement or wisdom you'd like to pass on?"
+        },
+        {
+          "prompt": "What values do you hope will continue in your family or community?"
+        },
+        {
+          "prompt": "What are your hopes for the world in the next 20 or 50 years?"
+        },
+        {
+          "prompt": "If you could write a short letter to the future, what would you say?",
+          "followUp": "What one life lesson would you be sure to include?"
+        },
+        {
+          "prompt": "What would you like people to remember most about you?"
+        },
+        {
+          "prompt": "If you could teach a class on life, what would you include in your first lesson?"
+        }
+      ]
+    },
+    {
+      "id": "travel-adventures",
+      "title": "Travel & Adventures",
+      "questions": [
+        {
+          "prompt": "Have you ever taken a trip that changed your perspective on life?",
+          "followUp": "What made it so memorable?"
+        },
+        {
+          "prompt": "What was traveling like when you were younger compared to now?"
+        },
+        {
+          "prompt": "Is there a special place you visited that you'd love to return to?"
+        },
+        {
+          "prompt": "Did you ever dream of visiting somewhere you never got to see?"
+        },
+        {
+          "prompt": "What was the most unexpected thing you discovered on your travels?"
+        },
+        {
+          "prompt": "How did you plan trips back in the day (maps, guidebooks, word of mouth)?"
+        },
+        {
+          "prompt": "If you could recommend one travel destination, where would it be and why?"
+        }
+      ]
+    },
+    {
+      "id": "pets-animal-companions",
+      "title": "Pets & Animal Companions",
+      "questions": [
+        {
+          "prompt": "Did you ever have a pet growing up or later in life?",
+          "followUp": "What was your favorite thing about them?"
+        },
+        {
+          "prompt": "How did your pet(s) fit into your family or home life?"
+        },
+        {
+          "prompt": "Were animals treated differently in your community back then compared to now?"
+        },
+        {
+          "prompt": "Do you recall any funny or touching stories involving animals?"
+        },
+        {
+          "prompt": "If you never had a pet, did you have a favorite animal or type of animal?"
+        },
+        {
+          "prompt": "How do you feel animals can help people emotionally?"
+        },
+        {
+          "prompt": "Is there a special bond you formed with a pet that you'll always remember?"
+        }
+      ]
+    },
+    {
+      "id": "faith-spirituality-beliefs",
+      "title": "Faith, Spirituality & Inner Beliefs",
+      "questions": [
+        {
+          "prompt": "Were you raised with particular religious or spiritual traditions?",
+          "followUp": "How did they shape your values?"
+        },
+        {
+          "prompt": "Have your beliefs changed over time, and if so, how?"
+        },
+        {
+          "prompt": "What role has faith or spirituality played during challenging moments?"
+        },
+        {
+          "prompt": "Do you have a favorite prayer, hymn, or comforting text?"
+        },
+        {
+          "prompt": "Has there been a mentor, leader, or figure in your faith community who inspired you?"
+        },
+        {
+          "prompt": "What traditions or practices give you peace or comfort today?"
+        },
+        {
+          "prompt": "If you could share a lesson from your spiritual journey, what would it be?"
+        }
+      ]
+    },
+    {
+      "id": "community-volunteerism",
+      "title": "Community & Volunteerism",
+      "questions": [
+        {
+          "prompt": "Were you ever involved in community groups or volunteering?",
+          "followUp": "What inspired you to get involved?"
+        },
+        {
+          "prompt": "How important is community service to you?"
+        },
+        {
+          "prompt": "Did you or your neighbors help each other in times of need? How so?"
+        },
+        {
+          "prompt": "Is there a particular cause or organization you feel strongly about?"
+        },
+        {
+          "prompt": "How have you seen your neighborhood or community change over time?"
+        },
+        {
+          "prompt": "What would you tell younger people about giving back to their communities?"
+        },
+        {
+          "prompt": "Is there a memorable project or event you helped organize or participate in?"
+        }
+      ]
+    },
+    {
+      "id": "celebrations-milestones",
+      "title": "Celebrations & Milestones",
+      "questions": [
+        {
+          "prompt": "What is your most memorable birthday or anniversary celebration?",
+          "followUp": "Why does it stand out to you?"
+        },
+        {
+          "prompt": "Did you celebrate your wedding or engagement in a special way?"
+        },
+        {
+          "prompt": "How were big milestones (like retirement or graduation) marked in your family?"
+        },
+        {
+          "prompt": "Were there any cultural or community celebrations you looked forward to each year?"
+        },
+        {
+          "prompt": "Have you ever thrown a surprise party or had one thrown for you?"
+        },
+        {
+          "prompt": "How do you think celebrating milestones has changed over time?"
+        },
+        {
+          "prompt": "Which life milestone felt most significant to you, and why?"
+        }
+      ]
+    },
+    {
+      "id": "friendships-social-circles",
+      "title": "Friendships & Social Circles",
+      "questions": [
+        {
+          "prompt": "Who was your closest friend during different stages of your life?",
+          "followUp": "Do you still keep in touch with them today?"
+        },
+        {
+          "prompt": "What activities did you enjoy doing with friends in your youth?"
+        },
+        {
+          "prompt": "Have you made any new friends later in life that surprised you?"
+        },
+        {
+          "prompt": "How did you usually meet new people—through school, work, or community events?"
+        },
+        {
+          "prompt": "What qualities do you value most in a friend?"
+        },
+        {
+          "prompt": "Is there a funny or unforgettable 'friendship moment' you'd love to relive?"
+        },
+        {
+          "prompt": "If you lost touch with a friend, how did that affect you, and did you ever reconnect?"
+        }
+      ]
+    },
+    {
+      "id": "food-cooking-traditions",
+      "title": "Food, Cooking & Traditions",
+      "questions": [
+        {
+          "prompt": "Did you have a favorite family recipe passed down through generations?",
+          "followUp": "Would you still make it today?"
+        },
+        {
+          "prompt": "What was mealtime like in your household when you were growing up?"
+        },
+        {
+          "prompt": "Did you ever grow your own vegetables or raise animals for food?"
+        },
+        {
+          "prompt": "How did you learn to cook, and what was the first dish you mastered?"
+        },
+        {
+          "prompt": "Were there any local or regional foods that were special to your area?"
+        },
+        {
+          "prompt": "Has your taste changed over the years? What do you enjoy eating now?"
+        },
+        {
+          "prompt": "How has dining out or shopping for groceries changed compared to the past?"
+        }
+      ]
+    },
+    {
+      "id": "entertainment-leisure",
+      "title": "Entertainment & Leisure",
+      "questions": [
+        {
+          "prompt": "What kind of music or radio shows did you listen to when you were younger?"
+        },
+        {
+          "prompt": "Did you have a favorite TV show or movie star?",
+          "followUp": "How did you watch movies—at a theater, drive-in, or at home?"
+        },
+        {
+          "prompt": "What role did movies, television, or radio play in your family gatherings?"
+        },
+        {
+          "prompt": "Have you been to any memorable concerts or performances?"
+        },
+        {
+          "prompt": "Did you ever learn a musical instrument or enjoy singing?"
+        },
+        {
+          "prompt": "Which forms of entertainment from the past do you wish were still popular?"
+        },
+        {
+          "prompt": "How has entertainment changed from your perspective over the decades?"
+        }
+      ]
+    },
+    {
+      "id": "technology-communication-shifts",
+      "title": "Technology & Communication Shifts",
+      "questions": [
+        {
+          "prompt": "What's the first piece of technology you remember being amazed by?"
+        },
+        {
+          "prompt": "How did you communicate with friends or family before phones became common?"
+        },
+        {
+          "prompt": "Did you ever use typewriters, telegrams, or early home computers?"
+        },
+        {
+          "prompt": "How do you feel about today's smartphones, social media, and online communication?"
+        },
+        {
+          "prompt": "Is there a technology you initially resisted but now enjoy?"
+        },
+        {
+          "prompt": "What do you think will be the next big leap in communication or technology?"
+        },
+        {
+          "prompt": "If you could design a technology for the future, what would it do?"
+        }
+      ]
+    },
+    {
+      "id": "passions-dreams-aspirations",
+      "title": "Passions, Dreams & Aspirations",
+      "questions": [
+        {
+          "prompt": "As a young person, what did you dream of becoming or achieving?",
+          "followUp": "Did life turn out as you expected?"
+        },
+        {
+          "prompt": "Were there any passions you discovered later in life that surprised you?"
+        },
+        {
+          "prompt": "What goals or bucket-list items have you checked off over the years?"
+        },
+        {
+          "prompt": "If you could pursue one dream right now, what would it be?"
+        },
+        {
+          "prompt": "Did you ever have a role model who inspired your aspirations?"
+        },
+        {
+          "prompt": "How did your dreams and goals evolve as you aged or faced life events?"
+        },
+        {
+          "prompt": "Which of your dreams are you proudest to have achieved or attempted?"
+        }
+      ]
+    }
+  ]
+}
