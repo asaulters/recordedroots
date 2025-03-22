@@ -1,0 +1,27 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:GetItem",
+                "dynamodb:PutItem",
+                "dynamodb:Scan",
+                "dynamodb:Query",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:CreateTable",
+                "dynamodb:DescribeTable"
+            ],
+            "Resource": "arn:aws:dynamodb:us-east-2:713881801890:table/RecordedRootsResidents"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:CreateTable",
+                "dynamodb:DescribeTable"
+            ],
+            "Resource": "*"
+        }
+    ]
+}

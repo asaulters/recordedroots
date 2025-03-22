@@ -10,7 +10,7 @@ export const addResident = async (resident) => {
   if (!db) throw new Error('Database not initialized');
 
   // First save to server
-  const apiUrl = 'https://recordedroots.onrender.com/api';
+  const apiUrl = process.env.REACT_APP_API_URL;
   console.log('Attempting to save resident to DynamoDB:', resident);
   
   try {
@@ -54,7 +54,7 @@ export const addResident = async (resident) => {
 export const getResident = async (residentId) => {
   if (!db) throw new Error('Database not initialized');
 
-  const apiUrl = 'https://recordedroots.onrender.com/api';
+  const apiUrl = process.env.REACT_APP_API_URL;
   const upperResidentId = residentId.toUpperCase();
   
   try {
@@ -101,7 +101,7 @@ export const getResident = async (residentId) => {
 export const syncResidents = async () => {
   if (!db) throw new Error('Database not initialized');
 
-  const apiUrl = 'https://recordedroots.onrender.com/api';
+  const apiUrl = process.env.REACT_APP_API_URL;
   console.log('Starting resident sync...');
   
   try {
