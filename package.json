@@ -21,9 +21,11 @@
   "scripts": {
     "start": "concurrently \"npm run server\" \"react-scripts start\"",
     "server": "node server.js",
-    "build": "react-scripts build",
+    "build": "npx react-scripts build",
+    "render-build": "npm install && npx react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postinstall": "npm install --save react-scripts@5.0.1"
   },
   "eslintConfig": {
     "extends": [
