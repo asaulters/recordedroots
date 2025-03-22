@@ -18,12 +18,23 @@ const s3Client = new S3Client({
   }
 });
 
+// Ensure we use the correct table name that matches the IAM policy
+const DYNAMODB_TABLE = 'RecordedRootsResidents';
+
 const dynamoClient = new DynamoDBClient({
   region: process.env.AWS_REGION,
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   }
+});
+
+// Log startup configuration
+console.log('Server starting with configuration:', {
+  region: process.env.AWS_REGION,
+  tableName: DYNAMODB_TABLE,
+  envTableName: process.env.DYNAMODB_RESIDENTS_TABLE,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID ? '****' + process.env.AWS_ACCESS_KEY_ID.slice(-4) : 'undefined'
 });
 
 app.use(cors());
@@ -80,7 +91,7 @@ app.post('/api/residents', async (req, res) => {
   try {
     const resident = req.body;
     const command = new PutItemCommand({
-      TableName: process.env.DYNAMODB_RESIDENTS_TABLE,
+      TableName: DYNAMODB_TABLE,
       Item: marshall(resident)
     });
     
@@ -102,12 +113,13 @@ app.get('/api/debug/resident/:residentId', async (req, res) => {
     console.log('Debug: Environment variables:', {
       AWS_REGION: process.env.AWS_REGION,
       DYNAMODB_RESIDENTS_TABLE: process.env.DYNAMODB_RESIDENTS_TABLE,
+      DYNAMODB_TABLE: DYNAMODB_TABLE,
       AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID ? '****' + process.env.AWS_ACCESS_KEY_ID.slice(-4) : 'undefined',
       AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY ? '****' : 'undefined'
     });
     
     const command = new GetItemCommand({
-      TableName: process.env.DYNAMODB_RESIDENTS_TABLE,
+      TableName: DYNAMODB_TABLE,
       Key: marshall({ residentId: residentId.toUpperCase() })
     });
     
@@ -122,7 +134,7 @@ app.get('/api/debug/resident/:residentId', async (req, res) => {
         error: 'Resident not found',
         debugInfo: {
           queriedId: residentId.toUpperCase(),
-          tableName: process.env.DYNAMODB_RESIDENTS_TABLE
+          tableName: DYNAMODB_TABLE
         }
       });
     }
@@ -156,12 +168,13 @@ app.get('/api/debug/residents', async (req, res) => {
     console.log('Debug: Environment variables:', {
       AWS_REGION: process.env.AWS_REGION,
       DYNAMODB_RESIDENTS_TABLE: process.env.DYNAMODB_RESIDENTS_TABLE,
+      DYNAMODB_TABLE: DYNAMODB_TABLE,
       AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID ? '****' + process.env.AWS_ACCESS_KEY_ID.slice(-4) : 'undefined',
       AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY ? '****' : 'undefined'
     });
     
     const command = new ScanCommand({
-      TableName: process.env.DYNAMODB_RESIDENTS_TABLE
+      TableName: DYNAMODB_TABLE
     });
     
     console.log('Debug: Executing DynamoDB command:', JSON.stringify(command.input, null, 2));
@@ -173,7 +186,7 @@ app.get('/api/debug/residents', async (req, res) => {
     res.json({
       count: residents.length,
       residents: residents,
-      tableName: process.env.DYNAMODB_RESIDENTS_TABLE
+      tableName: DYNAMODB_TABLE
     });
   } catch (error) {
     console.error('Error fetching residents:', error);
