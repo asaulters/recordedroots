@@ -10,8 +10,13 @@ export const addResident = async (resident) => {
   if (!db) throw new Error('Database not initialized');
 
   // First save to server
-  const apiUrl = process.env.REACT_APP_API_URL;
+  let apiUrl = process.env.REACT_APP_API_URL || '/api';
+  // If we're in production (on Render), use the full URL
+  if (window.location.hostname.includes('render.com') || window.location.hostname.includes('recordedroots.com')) {
+    apiUrl = `https://${window.location.hostname}${apiUrl}`;
+  }
   console.log('Attempting to save resident to DynamoDB:', resident);
+  console.log('Using API URL:', apiUrl);
   
   try {
     const response = await fetch(`${apiUrl}/residents`, {
@@ -54,12 +59,17 @@ export const addResident = async (resident) => {
 export const getResident = async (residentId) => {
   if (!db) throw new Error('Database not initialized');
 
-  const apiUrl = process.env.REACT_APP_API_URL;
+  let apiUrl = process.env.REACT_APP_API_URL || '/api';
+  // If we're in production (on Render), use the full URL
+  if (window.location.hostname.includes('render.com') || window.location.hostname.includes('recordedroots.com')) {
+    apiUrl = `https://${window.location.hostname}${apiUrl}`;
+  }
   const upperResidentId = residentId.toUpperCase();
   
   try {
     // First check what's in DynamoDB using debug endpoint
     console.log('Checking DynamoDB for resident:', upperResidentId);
+    console.log('Using API URL:', apiUrl);
     const debugResponse = await fetch(`${apiUrl}/debug/resident/${upperResidentId}`);
     const debugData = await debugResponse.json();
     console.log('DynamoDB debug response:', debugData);
@@ -101,8 +111,13 @@ export const getResident = async (residentId) => {
 export const syncResidents = async () => {
   if (!db) throw new Error('Database not initialized');
 
-  const apiUrl = process.env.REACT_APP_API_URL;
+  let apiUrl = process.env.REACT_APP_API_URL || '/api';
+  // If we're in production (on Render), use the full URL
+  if (window.location.hostname.includes('render.com') || window.location.hostname.includes('recordedroots.com')) {
+    apiUrl = `https://${window.location.hostname}${apiUrl}`;
+  }
   console.log('Starting resident sync...');
+  console.log('Using API URL:', apiUrl);
   
   try {
     // Use debug endpoint to get detailed info
