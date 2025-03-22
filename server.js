@@ -98,6 +98,14 @@ app.get('/api/debug/resident/:residentId', async (req, res) => {
     const { residentId } = req.params;
     console.log('Debug: Querying DynamoDB for resident:', residentId);
     
+    // Log environment variables (redacted for security)
+    console.log('Debug: Environment variables:', {
+      AWS_REGION: process.env.AWS_REGION,
+      DYNAMODB_RESIDENTS_TABLE: process.env.DYNAMODB_RESIDENTS_TABLE,
+      AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID ? '****' + process.env.AWS_ACCESS_KEY_ID.slice(-4) : 'undefined',
+      AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY ? '****' : 'undefined'
+    });
+    
     const command = new GetItemCommand({
       TableName: process.env.DYNAMODB_RESIDENTS_TABLE,
       Key: marshall({ residentId: residentId.toUpperCase() })
@@ -124,16 +132,39 @@ app.get('/api/debug/resident/:residentId', async (req, res) => {
     res.json(resident);
   } catch (error) {
     console.error('Error fetching resident:', error);
-    res.status(500).json({ error: 'Failed to fetch resident' });
+    // Provide more detailed error information
+    const errorDetails = {
+      message: error.message,
+      name: error.name,
+      code: error.code,
+      requestId: error.$metadata?.requestId,
+      cfId: error.$metadata?.cfId,
+      statusCode: error.$metadata?.httpStatusCode
+    };
+    console.error('Error details:', errorDetails);
+    res.status(500).json({ 
+      error: 'Failed to fetch resident',
+      details: errorDetails
+    });
   }
 });
 
 app.get('/api/debug/residents', async (req, res) => {
   console.log('Debug: Scanning DynamoDB for all residents');
   try {
+    // Log environment variables (redacted for security)
+    console.log('Debug: Environment variables:', {
+      AWS_REGION: process.env.AWS_REGION,
+      DYNAMODB_RESIDENTS_TABLE: process.env.DYNAMODB_RESIDENTS_TABLE,
+      AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID ? '****' + process.env.AWS_ACCESS_KEY_ID.slice(-4) : 'undefined',
+      AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY ? '****' : 'undefined'
+    });
+    
     const command = new ScanCommand({
       TableName: process.env.DYNAMODB_RESIDENTS_TABLE
     });
+    
+    console.log('Debug: Executing DynamoDB command:', JSON.stringify(command.input, null, 2));
     
     const response = await dynamoClient.send(command);
     const residents = response.Items.map(item => unmarshall(item));
@@ -146,7 +177,20 @@ app.get('/api/debug/residents', async (req, res) => {
     });
   } catch (error) {
     console.error('Error fetching residents:', error);
-    res.status(500).json({ error: 'Failed to fetch residents' });
+    // Provide more detailed error information
+    const errorDetails = {
+      message: error.message,
+      name: error.name,
+      code: error.code,
+      requestId: error.$metadata?.requestId,
+      cfId: error.$metadata?.cfId,
+      statusCode: error.$metadata?.httpStatusCode
+    };
+    console.error('Error details:', errorDetails);
+    res.status(500).json({ 
+      error: 'Failed to fetch residents',
+      details: errorDetails
+    });
   }
 });
 
