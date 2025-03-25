@@ -1,5 +1,11 @@
 export const generatePresignedUrl = async (recordingId, contentType, residentId, questionTopic, recordingDate) => {
-  const apiUrl = process.env.REACT_APP_API_URL;
+  let apiUrl = process.env.REACT_APP_API_URL || '/api';
+  // If we're in production (on Render), use the full URL
+  if (window.location.hostname.includes('render.com') || window.location.hostname.includes('recordedroots.com')) {
+    apiUrl = `https://${window.location.hostname}${apiUrl}`;
+  }
+  console.log('Using API URL for presigned URL generation:', apiUrl);
+  
   const response = await fetch(`${apiUrl}/generate-presigned-url`, {
     method: 'POST',
     headers: {
