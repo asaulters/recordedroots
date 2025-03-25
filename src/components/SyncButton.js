@@ -62,9 +62,51 @@ export const SyncButton = () => {
           );
           console.log('Got presigned URL:', presignedUrl);
 
-          // Upload to S3
-          console.log('Starting S3 upload...');
-          await uploadToS3(presignedUrl, recording.blob);
+          // Upload to S3 using our server-side proxy
+          console.log('Starting S3 upload via server proxy...');
+          
+          // Convert blob to base64
+          const base64Data = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              // Remove the data URL prefix (e.g., "data:image/png;base64,")
+              const base64 = reader.result.split(',')[1];
+              resolve(base64);
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(recording.blob);
+          });
+          
+          // Extract the S3 key from the presigned URL
+          const urlObj = new URL(presignedUrl);
+          const s3Key = urlObj.pathname.substring(1); // Remove leading slash
+          
+          // Get API URL
+          let apiUrl = process.env.REACT_APP_API_URL || '/api';
+          if (window.location.hostname.includes('render.com') || window.location.hostname.includes('recordedroots.com')) {
+            apiUrl = `https://${window.location.hostname}${apiUrl}`;
+          }
+          
+          console.log('Using API URL for S3 upload:', apiUrl);
+          
+          // Send the base64 data to our server to upload to S3
+          const response = await fetch(`${apiUrl}/upload-to-s3`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              s3Key,
+              contentType: recording.blob.type,
+              base64Data,
+            }),
+          });
+          
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Failed to upload to S3: ${response.status} ${errorText}`);
+          }
+          
           console.log('S3 upload complete');
 
           // Mark as uploaded in IndexedDB
