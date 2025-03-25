@@ -38,7 +38,8 @@ console.log('Server starting with configuration:', {
 });
 
 app.use(cors());
-app.use(express.json());
+// Increase JSON payload limit to handle base64-encoded videos
+app.use(express.json({ limit: '50mb' }));
 
 // Serve static files from the build directory
 app.use(express.static('build'));
@@ -83,6 +84,47 @@ app.post('/api/generate-presigned-url', async (req, res) => {
   } catch (error) {
     console.error('Error generating pre-signed URL:', error);
     res.status(500).json({ error: 'Failed to generate pre-signed URL' });
+  }
+});
+
+// Upload to S3 endpoint (to avoid CORS issues)
+app.post('/api/upload-to-s3', async (req, res) => {
+  try {
+    console.log('Received S3 upload request');
+    const { s3Key, contentType, base64Data } = req.body;
+    
+    if (!s3Key || !contentType || !base64Data) {
+      return res.status(400).json({ error: 'Missing required parameters' });
+    }
+    
+    console.log('Uploading to S3:', {
+      bucket: process.env.S3_BUCKET_NAME,
+      key: s3Key,
+      contentType,
+      dataSize: base64Data.length
+    });
+    
+    // Convert base64 to buffer
+    const buffer = Buffer.from(base64Data, 'base64');
+    
+    // Upload to S3
+    const command = new PutObjectCommand({
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: s3Key,
+      Body: buffer,
+      ContentType: contentType
+    });
+    
+    await s3Client.send(command);
+    console.log('Successfully uploaded to S3');
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error uploading to S3:', error);
+    res.status(500).json({ 
+      error: 'Failed to upload to S3',
+      details: error.message
+    });
   }
 });
 
