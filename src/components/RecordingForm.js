@@ -1,20 +1,54 @@
 import React from 'react';
 import { useMediaRecorder } from '../hooks/useMediaRecorder';
+import './RecordingForm.css';
 
 export const RecordingForm = ({ residentId, questionTopic, question, isFollowUp }) => {
   const [cameraError, setCameraError] = React.useState(null);
+  const [isVideoVisible, setIsVideoVisible] = React.useState(false);
+  const videoPreviewRef = React.useRef(null);
+  
   console.log('RecordingForm rendered with props:', JSON.stringify({ 
     residentId, 
     questionTopic, 
     question, 
     isFollowUp 
   }, null, 2));
+  
   const { isRecording, error: recordingError, startRecording, stopRecording } = useMediaRecorder({
     residentId,
     questionTopic,
     question,
     isFollowUp
   });
+  
+  // Set up intersection observer to detect when video is in viewport
+  React.useEffect(() => {
+    const options = {
+      root: null, // use the viewport
+      rootMargin: '0px',
+      threshold: 0.3 // trigger when 30% of the element is visible
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setIsVideoVisible(true);
+          // Once it's visible, we don't need to observe anymore
+          observer.unobserve(entry.target);
+        }
+      });
+    }, options);
+    
+    if (videoPreviewRef.current) {
+      observer.observe(videoPreviewRef.current);
+    }
+    
+    return () => {
+      if (videoPreviewRef.current) {
+        observer.unobserve(videoPreviewRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="recording-form">
@@ -28,7 +62,10 @@ export const RecordingForm = ({ residentId, questionTopic, question, isFollowUp 
         </div>
       </div>
 
-      <div className="video-preview">
+      <div 
+        ref={videoPreviewRef}
+        className={`video-preview ${isVideoVisible ? 'visible' : ''}`}
+      >
         <video
           autoPlay
           playsInline
